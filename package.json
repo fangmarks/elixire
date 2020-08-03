@@ -1,0 +1,17 @@
+{
+  "name": "elixire",
+  "description": "Node Uploader for elixire instances",
+  "version": "0.0.1",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "rm -rf build && tsc && echo Build Finished"
+  },
+  "keywords": [],
+  "author": "hokkqi",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^14.0.23",
+    "chainfetch": "^1.2.2",
+    "node-fetch": "^2.6.0"
+  }
+}
