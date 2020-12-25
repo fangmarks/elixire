@@ -13,5 +13,5 @@
     "declaration": true
   },
   "include": ["**/*"],
-  "exclude": ["node_modules", "build", "out", "test", "tmp", "logs"]
+  "exclude": ["node_modules", "build", "out", "test*", "tmp", "logs"]
 }
