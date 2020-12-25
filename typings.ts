@@ -310,7 +310,7 @@ declare namespace Elixire {
     /**
      * Only present when `state` is `processing`
      *
-     * the ISO 8601 timestaml of when the dump generation started
+     * the ISO 8601 timestamp of when the dump generation started
      */
     start_timestamp?: string;
     /**

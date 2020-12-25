@@ -69,7 +69,7 @@ async function recursiveFetch(a, ind, ret: any[]) {
   let i = ind
   let res = await get(`${a.instance}/api/list?page=${i}`)
     .set("Authorization", a.options.apikey)
-    .set("User-Agent", `node-elixire/${pkg.version} (werewolf.design/elixire)`).catch(async e => {
+    .set("User-Agent", a.options.useragent).catch(async e => {
       if (e.status === 429) {
         console.log(e.headers)
         console.log(e.body)
@@ -83,7 +83,7 @@ async function recursiveFetch(a, ind, ret: any[]) {
   if (remaining === '1') {
     await sleep(a.options.sleep)
   }
-  if (isEmptyObject(res.body.files)) return Object.values(ret)
+  if (isEmptyObject(res.body.files)) return ret.values().next().value
   else {
     ret.push(res.body.files)
     console.log(ret.length)
@@ -140,7 +140,7 @@ class Elixire {
 
     return res.body;
   }
-  async listFiles() {
+  async listFiles(): Promise<[]> {
     let x = await recursiveFetch(this, 1, [])
     return x
   }
