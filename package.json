@@ -1,7 +1,7 @@
 {
   "name": "elixire",
   "description": "Node Uploader for elixire instances",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "main": "build/index.js",
   "scripts": {
     "build": "rm -rf build && tsc && echo Build Finished"
