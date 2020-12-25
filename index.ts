@@ -141,7 +141,7 @@ class Elixire {
     return res.body;
   }
   async listFiles(): Promise<[]> {
-    let x = await recursiveFetch(this, 1, [])
+    let x = await recursiveFetch(this, 0, [])
     return x
   }
 }
