@@ -12,6 +12,10 @@ declare namespace Elixire {
      */
     instance_url: string;
     /**
+     * 
+     */
+    sleep: number
+    /**
      * API Key from your Elixire Instance
      *
      */
@@ -372,7 +376,7 @@ declare namespace Elixire {
     version: string;
     api: string;
   }
-  interface Science {}
+  interface Science { }
 
   /**
    * Gives days until 100th anniversary of Treaty of Lausanne ("Lausanne"), also returns if we're World™ Power™ or not.

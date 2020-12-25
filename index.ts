@@ -6,8 +6,18 @@ import {
   ShortenInput,
   ShortenOutput,
 } from "./typings";
-import { post } from "chainfetch";
+import { post, get } from "chainfetch";
 import { parse as parseURL } from "url";
+
+function isEmptyObject(obj) {
+  var name;
+  for (name in obj) {
+    if (obj.hasOwnProperty(name)) {
+      return false;
+    }
+  }
+  return true;
+}
 
 function handleError(status: number) {
   switch (status) {
@@ -51,6 +61,38 @@ function handleError(status: number) {
   }
 }
 
+function sleep(s) {
+  return new Promise(resolve => setTimeout(resolve, 1000 * s));
+}
+
+async function recursiveFetch(a, ind, ret: any[]) {
+  let i = ind
+  let res = await get(`${a.instance}/api/list?page=${i}`)
+    .set("Authorization", a.options.apikey)
+    .set("User-Agent", `node-elixire/${pkg.version} (werewolf.design/elixire)`).catch(async e => {
+      if (e.status === 429) {
+        console.log(e.headers)
+        console.log(e.body)
+        await sleep(e.body.retry_after)
+        recursiveFetch(a, ind, ret)
+      } else {
+        return console.error(e)
+      }
+    })
+  let remaining = res.headers.get('x-ratelimit-remaining')
+  if (remaining === '1') {
+    await sleep(a.options.sleep)
+  }
+  if (isEmptyObject(res.body.files)) return Object.values(ret)
+  else {
+    ret.push(res.body.files)
+    console.log(ret.length)
+    // await sleep(1)
+    return recursiveFetch(a, i + 1, ret)
+
+  }
+}
+
 class Elixire {
   private instance: string;
   options: Options;
@@ -61,6 +103,7 @@ class Elixire {
         options.useragent ||
         `node-elixire/${pkg.version} (werewolf.design/elixire)`,
       instance_url: options.instance_url || "elixi.re",
+      sleep: options.sleep || 5,
       apikey: options.apikey || undefined,
     };
     this.instance = `https://${this.options.instance_url}`;
@@ -96,6 +139,10 @@ class Elixire {
     handleError(res.status);
 
     return res.body;
+  }
+  async listFiles() {
+    let x = await recursiveFetch(this, 1, [])
+    return x
   }
 }
 
