@@ -142,7 +142,7 @@ class Elixire {
 
     return res.body;
   }
-  async listFiles(): Promise<[]> {
+  async listFiles(): Promise<{}> {
     Armpit.info(`Fetching upload list from ${this.instance}/api/list`)
     Armpit.info(`Make sure to save the response from this Function (somehow) otherwise it will go to waste`)
     let x = await recursiveFetch(this, 0, [])
