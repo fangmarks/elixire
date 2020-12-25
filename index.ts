@@ -8,6 +8,8 @@ import {
 } from "./typings";
 import { post, get } from "chainfetch";
 import { parse as parseURL } from "url";
+import Armpits from '@sniff/armpits'
+let Armpit = new Armpits()
 
 function isEmptyObject(obj) {
   var name;
@@ -71,8 +73,8 @@ async function recursiveFetch(a, ind, ret: any[]) {
     .set("Authorization", a.options.apikey)
     .set("User-Agent", a.options.useragent).catch(async e => {
       if (e.status === 429) {
-        console.log(e.headers)
-        console.log(e.body)
+        // console.log(e.headers)
+        // console.log(e.body)
         await sleep(e.body.retry_after)
         recursiveFetch(a, ind, ret)
       } else {
@@ -86,7 +88,7 @@ async function recursiveFetch(a, ind, ret: any[]) {
   if (isEmptyObject(res.body.files)) return ret.values().next().value
   else {
     ret.push(res.body.files)
-    console.log(ret.length)
+    // console.log(ret.length)
     // await sleep(1)
     return recursiveFetch(a, i + 1, ret)
 
@@ -141,6 +143,8 @@ class Elixire {
     return res.body;
   }
   async listFiles(): Promise<[]> {
+    Armpit.info(`Fetching upload list from ${this.instance}/api/list`)
+    Armpit.info(`Make sure to save the response from this Function (somehow) otherwise it will go to waste`)
     let x = await recursiveFetch(this, 0, [])
     return x
   }
